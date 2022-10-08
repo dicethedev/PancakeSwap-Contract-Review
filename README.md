@@ -21,14 +21,16 @@ The first (1) `import` which is bsc-library is a contract token like ERC20, but 
 
 The second (2) `import` which is CakeToken.sol - on PancakeSwap it makes it leverages its own utility token known as CAKE, which is the PancakeSwap token. The CAKE token is used in a variety of different ways within the PancakeSwap platform, including: Yield Farming – done through the PancakeSwap farm. PancakeSwap staking.
 
-```contract SyrupBar is BEP20("SyrupBar Token", "SYRUP") {
+```solidity
+   contract SyrupBar is BEP20("SyrupBar Token", "SYRUP") {
 ```
 
 This contract inheriting the contract BEP20, this is the contract name `SYRUP`. This include that the contract inherit all function, also the constructor in the BEP20 inherited takes in two parameter which are the `name` and `symbol` of the token.
 
 ## This is the contructor function
 
-```constructor(CakeToken _cake) public {
+```solidity
+     constructor(CakeToken _cake) public {
         cake = _cake;
     }
 ```
@@ -37,7 +39,8 @@ constructor: the contructor function taken the parameter `_cake` and it set the 
 
 ## Functions 
 
-```function mint(address _to, uint256 _amount) public onlyOwner {
+```solidity
+   function mint(address _to, uint256 _amount) public onlyOwner {
         _mint(_to, _amount);
         _moveDelegates(address(0), _delegates[_to], _amount);
     }
@@ -45,7 +48,8 @@ constructor: the contructor function taken the parameter `_cake` and it set the 
 mint: The `_mint` function is called inside this function to mint token to the to address and the inputed `_amount` of token is the amount of to be minted to the `_to` address. Note, that this function can only be called by the `msg.sender` specified in the `onlyOwner` modifier which happen to be the master chief.
 
 
-```function burn(address _from, uint256 _amount) public onlyOwner {
+```solidity
+    function burn(address _from, uint256 _amount) public onlyOwner {
         _burn(_from, _amount);
         _moveDelegates(_delegates[_from], address(0), _amount);
     }
@@ -53,7 +57,8 @@ mint: The `_mint` function is called inside this function to mint token to the t
 
 burn: The _burn function from the BEP20 contract inherited. It burns Syrupbar token. In this case, it can only be called by the owner -- which has to be the master chief of the onlyOwner modifier.
 
-```function safeCakeTransfer(address _to, uint256 _amount) public onlyOwner {
+```solidity
+  function safeCakeTransfer(address _to, uint256 _amount) public onlyOwner {
         uint256 cakeBal = cake.balanceOf(address(this));
         if (_amount > cakeBal) {
             cake.transfer(_to, cakeBal);
@@ -64,7 +69,8 @@ burn: The _burn function from the BEP20 contract inherited. It burns Syrupbar to
 
 safeCakeTransfer: The safecakeTransfer actually transfer to the `address _to` that is stated in the parameter, using the amount in the parameter. A condition was set in .. to avoid the arounding error of not having a enough cake in the contract. Therefore, if the amount pass in is greater than the total balance of the cake token in this contract. it transfer the total balance of the cake token in the contract, else it transfer the amount stated in the parameter.
 
-```function delegates(address delegator) external view returns (address) {
+```solidity
+   function delegates(address delegator) external view returns (address) {
         return _delegates[delegator];
     }
 ```
